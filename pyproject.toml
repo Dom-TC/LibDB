@@ -1,0 +1,47 @@
+[project]
+name = "libdb"
+version = "0.1.0"
+description = "A basic book inventory tracker"
+authors = [
+    {name = "Dom Chester",email = "dom.chester@me.com"}
+]
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "flask (>=3.1.1,<4.0.0)",
+    "sqlalchemy (>=2.0.41,<3.0.0)",
+    "flask-sqlalchemy (>=3.1.1,<4.0.0)"
+]
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.isort]
+profile = "black"
+line_length = 88
+
+[tool.black]
+line-length = 88
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | _build
+  | buck-out
+  | build
+  | dist
+  # The following are specific to Black, you probably don't want those.
+  | blib2to3
+  | tests/data
+  | profiling
+)/
+'''
+
+[tool.typos]
+default.extend-words = { }

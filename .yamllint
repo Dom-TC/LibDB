@@ -1,0 +1,8 @@
+---
+extends: default
+
+rules:
+  truthy:
+    # Only check values for truthiness.
+    # Fixes errors with github actions 'on' field.
+    check-keys: false
