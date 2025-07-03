@@ -6,16 +6,35 @@ authors = [
     {name = "Dom Chester",email = "dom.chester@me.com"}
 ]
 readme = "README.md"
-requires-python = ">=3.12"
+requires-python = ">=3.12,<4.0"
 dependencies = [
     "flask (>=3.1.1,<4.0.0)",
     "sqlalchemy (>=2.0.41,<3.0.0)",
-    "flask-sqlalchemy (>=3.1.1,<4.0.0)"
+    "flask-sqlalchemy (>=3.1.1,<4.0.0)",
+    "python-dotenv (>=1.1.1,<2.0.0)"
 ]
+
+[tool.poetry.group.dev.dependencies]
+taskipy = "^1.14.1"
+flake8 = "^7.3.0"
+flake8-blind-except = "^0.2.1"
+flake8-bugbear = "^24.12.12"
+flake8-builtins = "^2.5.0"
+flake8-debugger = "^4.1.2"
+flake8-docstrings = "^1.7.0"
+flake8-eradicate = "^1.5.0"
+flake8-simplify = "^0.22.0"
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.taskipy.tasks]
+start = "flask --app libdb run --debug"
+pytest = "pytest --cov=libdb tests/ --cov-report term:skip-covered"
+flake8 = "flake8 libdb"
+bandit = "bandit -c pyproject.toml -r libdb"
+mypy = "mypy libdb"
 
 [tool.isort]
 profile = "black"
