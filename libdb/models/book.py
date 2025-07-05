@@ -25,6 +25,8 @@ class Book(db.Model):
     added: Mapped[Optional[str]] = mapped_column(default=datetime.now())
     has_read: Mapped[Optional[bool]] = mapped_column(default=False)
 
+    authors = db.relationship("Author", secondary="book_author", back_populates="books")
+
     def __repr__(self) -> str:
         """Return book title and publisher."""
         return f"<Book title={self.title!r} publisher={self.publisher!r}>"

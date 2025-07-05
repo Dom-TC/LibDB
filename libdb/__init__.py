@@ -6,8 +6,8 @@ import os
 from dotenv import load_dotenv
 from flask import Flask
 
+from libdb.blueprints import library_blueprint
 from libdb.database import init_db
-from libdb.models import Book
 
 from . import default_config
 
@@ -35,19 +35,9 @@ def create_app(test_config=None):
         os.makedirs(app.instance_path)
 
     # Setup database
-    db = init_db(app)
+    db = init_db(app)  # noqa: F841
 
-    # a simple page that says hello
-    @app.route("/hello")
-    def hello():
-        book = Book(
-            title="The Name of the sdasas. dasdasde. asd",
-            subtitle="The  Chronicle: Day One",
-            publisher="DAW Books",
-        )
-        db.session.add(book)
-        db.session.commit()
-
-        return f'Hello, World! {app.config["SQLALCHEMY_DATABASE_URI"]} - {app.instance_path}'
+    app.register_blueprint(library_blueprint)
+    app.add_url_rule("/", endpoint="index")
 
     return app

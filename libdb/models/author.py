@@ -13,6 +13,8 @@ class Author(db.Model):
         primary_key=True, autoincrement=True, unique=True, default=None
     )
 
+    books = db.relationship("Book", secondary="book_author", back_populates="authors")
+
     def __repr__(self) -> str:
         """Return the author name."""
         return f"<Author Name={self.name!r}>"

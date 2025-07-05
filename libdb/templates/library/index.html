@@ -1,0 +1,20 @@
+{% extends 'base.html' %} {% block header %}
+<h1>{% block title %}My Books{% endblock %}</h1>
+{% endblock %} {% block content %}
+<h2>The Form</h2>
+{% from "_formhelpers.html" import render_form %} {{ render_form(search_form,
+action=url_for('library.index')) }} {% for book in books %}
+<article class="post">
+  <header>
+    <div>
+      <h1>{{ book['title'] }}: {{ book['subtitle'] }}</h1>
+      by {% for author in book.authors %} {{ author['name'] }}{% if not loop.last %}, {%
+      endif %}{% endfor %}
+      <br />
+      <i>Location: {{ book['location'] }}</i>
+    </div>
+  </header>
+</article>
+{% if not loop.last %}
+<hr />
+{% endif %} {% endfor %} {% endblock %}
