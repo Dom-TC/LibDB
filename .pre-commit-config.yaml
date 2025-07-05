@@ -105,3 +105,8 @@ repos:
     hooks:
       - id: yamllint
         args: [--strict]
+  - repo: https://github.com/djlint/djlint
+    rev: v1.36.4
+    hooks:
+      - id: djlint-jinja
+      - id: djlint-reformat-jinja

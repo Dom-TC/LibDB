@@ -6,7 +6,7 @@ import os
 from dotenv import load_dotenv
 from flask import Flask
 
-from libdb.blueprints import library_blueprint
+from libdb.blueprints import library_blueprint, manage_blueprint
 from libdb.database import init_db
 
 from . import default_config
@@ -38,6 +38,7 @@ def create_app(test_config=None):
     db = init_db(app)  # noqa: F841
 
     app.register_blueprint(library_blueprint)
+    app.register_blueprint(manage_blueprint)
     app.add_url_rule("/", endpoint="index")
 
     return app

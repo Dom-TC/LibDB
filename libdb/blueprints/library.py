@@ -1,4 +1,4 @@
-"""All views related to library management."""
+"""All views related to viewing the library."""
 
 from flask import Blueprint, render_template
 from sqlalchemy.orm import joinedload
@@ -19,12 +19,9 @@ def index():
     query = db.session.query(Book).join(Book.authors)  # type: ignore[arg-type]
 
     if search_form.validate_on_submit():
-        print("validated.")
         title = search_form.title.data.strip() if search_form.title.data else None
         author = search_form.author.data.strip() if search_form.author.data else None
 
-        print(f"title:  {title}")
-        print(f"author: {author}")
         if title:
             query = query.filter(Book.title.ilike(f"%{title}%"))
 
@@ -37,4 +34,4 @@ def index():
         # Default listing all books
         books = query.order_by(Author.name, Book.title).distinct().all()
 
-    return render_template("library/index.html", books=books, search_form=search_form)
+    return render_template("library/index.jinja", books=books, search_form=search_form)

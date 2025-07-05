@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<title>
+    {% block title %}
+    {% endblock title %}
+- LibDB</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+<nav>
+    <h1>LibDB</h1>
+</nav>
+<section class="content">
+    <header>
+        {% block header %}
+        {% endblock header %}
+    </header>
+    {% for message in get_flashed_messages() %}<div class="flash">{{ message }}</div>{% endfor %}
+    {% block content %}
+    {% endblock content %}
+</section>
