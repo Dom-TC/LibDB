@@ -6,6 +6,11 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
 <nav>
     <h1>LibDB</h1>
+    <span>
+        <a href="{{ url_for('library.index') }}">Search</a>
+        <a href="{{ url_for('manage.add_book') }}">Add Book</a>
+        <a href="{{ url_for('manage.add_author') }}">Add Author</a>
+    </span>
 </nav>
 <section class="content">
     <header>
