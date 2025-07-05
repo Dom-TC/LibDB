@@ -8,7 +8,7 @@ from libdb.database import db
 class Author(db.Model):
     """The author database model."""
 
-    name: Mapped[str]
+    name: Mapped[str] = mapped_column(unique=True, nullable=False)
     id: Mapped[int] = mapped_column(
         primary_key=True, autoincrement=True, unique=True, default=None
     )
