@@ -8,7 +8,7 @@ from sqlalchemy.orm import Mapped, mapped_column
 from libdb.database import db
 
 
-class Book(db.Model):
+class Book(db.Model):  # type: ignore[name-defined]
     """The book database model."""
 
     title: Mapped[str]

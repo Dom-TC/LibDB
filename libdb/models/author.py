@@ -5,7 +5,7 @@ from sqlalchemy.orm import Mapped, mapped_column
 from libdb.database import db
 
 
-class Author(db.Model):
+class Author(db.Model):  # type: ignore[name-defined]
     """The author database model."""
 
     name: Mapped[str] = mapped_column(unique=True, nullable=False)

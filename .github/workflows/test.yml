@@ -1,0 +1,34 @@
+---
+name: Run Tests
+
+on:
+  pull_request:
+  workflow_dispatch:
+  workflow_call:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.13.5
+
+      - name: Install dependencies
+        run: |
+          curl -sSL https://install.python-poetry.org | python3 -
+          poetry lock --no-update
+          poetry install --with dev
+
+      - name: Run pytest
+        run: poetry run pytest tests/
+
+      - name: Run bandit
+        run: poetry run bandit -c pyproject.toml -r libdb
+
+      - name: Run mypy
+        run: poetry run mypy libdb
