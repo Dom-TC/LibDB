@@ -1,7 +1,7 @@
 """A form to search for existing books in the library."""
 
 from flask_wtf import FlaskForm
-from wtforms import StringField
+from wtforms import StringField, SubmitField
 
 
 class SearchForm(FlaskForm):
@@ -9,3 +9,4 @@ class SearchForm(FlaskForm):
 
     title = StringField("Title")
     author = StringField("Author")
+    submit = SubmitField("Search")
