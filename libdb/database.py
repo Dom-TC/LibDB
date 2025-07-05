@@ -16,6 +16,7 @@ db = SQLAlchemy(model_class=Base)
 def init_db(app):
     """Create and setup the database."""
     # Initiate database
+    app.logger.info("Initialising database")
     db.init_app(app)
 
     # Import models
@@ -25,6 +26,7 @@ def init_db(app):
 
     # Create all models and tables
     with app.app_context():
+        app.logger.info("Creating tables")
         db.create_all()
 
     return db

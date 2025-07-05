@@ -1,5 +1,7 @@
 """All views related to managing books / authors."""
 
+import logging
+
 from flask import Blueprint, flash, redirect, render_template, url_for
 from sqlalchemy.exc import IntegrityError
 
@@ -7,6 +9,8 @@ from libdb.data_handlers import clean_whitespace
 from libdb.database import db
 from libdb.forms import AddAuthorForm, AddBookForm
 from libdb.models import Author, Book
+
+log = logging.getLogger(__name__)
 
 bp = Blueprint("manage", __name__, url_prefix="/manage")
 
@@ -19,14 +23,19 @@ def add_author():
     if form.validate_on_submit():
         author_name = clean_whitespace(form.name)
         new_author = Author(name=author_name)  # type: ignore[call-arg]
+
+        log.info(f"Adding author: {new_author.name}")
+
         db.session.add(new_author)
 
         try:
             db.session.commit()
             flash(f"Successfully added {new_author.name}.")
+            log.info(f"Successfully added author: {new_author.name}. Redirecting.")
             return redirect(url_for("manage.add_author"))
         except IntegrityError:
             db.session.rollback()
+            log.info(f"Failed to add author: {new_author.name} already exists.")
             flash(f"Author '{new_author.name}' already exists.", "error")
 
     else:
@@ -68,15 +77,19 @@ def add_book():
 
         new_book.authors = selected_authors
 
+        log.info(f"Adding book: {new_book.title}")
+
         db.session.add(new_book)
 
         try:
             db.session.commit()
+            log.info(f"Successfully added author: {new_book.title}. Redirecting.")
             flash(f"Successfully added {new_book.title}.")
             return redirect(url_for("manage.add_book"))
         except IntegrityError:
             db.session.rollback()
             flash("Failed to add book due to database error.", "error")
+            log.info(f"Failed to add book: {new_book.title}.")
 
     else:
         new_book = None
