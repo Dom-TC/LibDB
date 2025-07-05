@@ -2,20 +2,20 @@
     <form action="{{ action }}"
           method="{{ method|upper }}"
           {{ extra_attrs|safe }}>
-        {{ form.hidden_tag() }}
-        <dl>
-            {% for field in form if field.type != 'CSRFTokenField' %}{{ render_field(field) }}{% endfor %}
-        </dl>
-    </form>
-{% endmacro %}
-{% macro render_field(field) %}
-    {% if field.type != 'SubmitField' %}{{ field.label }}{% endif %}
-    <dd>
-        {{ field() |safe }}
-        {% if field.errors %}
-            <ul class="errors">
-                {% for error in field.errors %}<li>{{ error }}</li>{% endfor %}
-            </ul>
-        {% endif %}
-    </dd>
-{% endmacro %}
+        {%- if method|upper == 'POST' -%}{{ form.hidden_tag() }}{%- endif %}
+            <dl>
+                {% for field in form if field.type != 'CSRFTokenField' %}{{ render_field(field) }}{% endfor %}
+            </dl>
+        </form>
+    {% endmacro %}
+    {% macro render_field(field) %}
+        {% if field.type != 'SubmitField' %}{{ field.label }}{% endif %}
+        <dd>
+            {{ field() |safe }}
+            {% if field.errors %}
+                <ul class="errors">
+                    {% for error in field.errors %}<li>{{ error }}</li>{% endfor %}
+                </ul>
+            {% endif %}
+        </dd>
+    {% endmacro %}

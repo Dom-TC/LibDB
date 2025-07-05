@@ -10,3 +10,8 @@ class SearchForm(FlaskForm):
     title = StringField("Title")
     author = StringField("Author")
     submit = SubmitField("Search")
+
+    class Meta(FlaskForm.Meta):
+        """Disable csrf in SearchForm."""
+
+        csrf = False  # type: ignore

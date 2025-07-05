@@ -1,6 +1,6 @@
 """All views related to viewing the library."""
 
-from flask import Blueprint, redirect, render_template, url_for
+from flask import Blueprint, redirect, render_template, request
 
 from libdb.data_handlers import clean_whitespace
 from libdb.database import db
@@ -18,9 +18,9 @@ def index():
     # Join book and author tables
     query = db.session.query(Book).join(Book.authors)  # type: ignore[arg-type]
 
-    if form.validate_on_submit():
-        title = clean_whitespace(form.title)
-        author = clean_whitespace(form.author)
+    if form.validate():
+        title = request.args.get("title", "").strip()
+        author = request.args.get("author", "").strip()
 
         if title:
             query = query.filter(Book.title.ilike(f"%{title}%"))

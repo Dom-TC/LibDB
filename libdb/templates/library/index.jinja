@@ -4,7 +4,7 @@
 {% endblock title %}
 {% block content %}
     {% from "_formhelpers.jinja" import render_form %}
-    {{ render_form(form, action=url_for('library.index') ) }}
+    {{ render_form(form, action=url_for('library.index') , method='get') }}
     <div class="results">
         <h2>{{ result_count }}</h2>
         <ul>
