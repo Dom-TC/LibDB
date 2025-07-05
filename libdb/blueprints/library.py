@@ -34,4 +34,12 @@ def index():
         # Default listing all books
         books = query.order_by(Author.name, Book.title).distinct().all()
 
-    return render_template("library/index.jinja", books=books, form=form)
+    book_count = len(books)
+    if book_count == 1:
+        result_count = "1 Result"
+    else:
+        result_count = f"{book_count} Results"
+
+    return render_template(
+        "library/index.jinja", books=books, result_count=result_count, form=form
+    )
