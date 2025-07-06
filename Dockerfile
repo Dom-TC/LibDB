@@ -39,7 +39,9 @@ COPY log.conf gunicorn.conf.py ./
 COPY logs ./logs
 
 RUN adduser --disabled-password --gecos '' libdb && \
-    chown -R libdb:libdb /app
+    chown -R libdb:libdb /app && \
+    mkdir -p /etc/libdb/logs && \
+    chown -R libdb:libdb /etc/libdb/logs
 
 USER libdb
 
