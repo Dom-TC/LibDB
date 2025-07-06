@@ -7,7 +7,7 @@ ENV PYTHONFAULTHANDLER=1 \
 WORKDIR /app
 
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends curl=8.7.1 && \
+    apt-get install -y --no-install-recommends curl=7.88.1-* && \
     rm -rf /var/lib/apt/lists/*
 
 
@@ -25,7 +25,7 @@ ENV PIP_DEFAULT_TIMEOUT=100 \
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
-RUN :8.7.1 -sSL https://install.python-poetry.org | python3 -
+RUN curl -sSL https://install.python-poetry.org | python3 -
 
 WORKDIR /app
 
