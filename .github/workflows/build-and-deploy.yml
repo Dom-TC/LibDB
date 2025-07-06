@@ -118,30 +118,6 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           port: ${{ env.SERVER_PORT }}
           script: |
-            # Set environment variables
-            echo "LIBDB_SETTINGS_FILE=${{ vars.LIBDB_SETTINGS_FILE}}" \
-            > ${{ vars.SERVER_PATH}}/env_file
-            echo "LOG_LEVEL=${{ vars.LOG_LEVEL}}" \
-            >> ${{ vars.SERVER_PATH}}/env_file
-            echo "LOG_TO_FILE=${{ vars.LOG_TO_FILE}}" \
-            >> ${{ vars.SERVER_PATH}}/env_file
-            echo "LOG_FOLDER_PATH=${{ vars.LOG_FOLDER_PATH}}" \
-            >> ${{ vars.SERVER_PATH}}/env_file
-            echo "RELEASE_VERSION=${{ env.RELEASE_VERSION }}" \
-            >> ${{ vars.SERVER_PATH}}/env_file
-
-            # Create log folder, if needed
-            log_path="${{ vars.SERVER_PATH}}/logs"
-            echo log_path=$log_path
-            mkdir -p $log_path
-            chown -R ${{ env.SERVER_USER }}:${{ env.SERVER_USER }} $log_path
-
-            # Create instance folder, if needed
-            instance_path="${{ vars.SERVER_PATH}}/instance"
-            echo instance_path=$instance_path
-            mkdir -p $instance_path
-            chown -R ${{ env.SERVER_USER }}:${{ env.SERVER_USER }} $instance_path
-
             # Rebuild container
             docker compose -f ${{ vars.SERVER_PATH}}/docker-compose.yml pull
             docker compose -f ${{ vars.SERVER_PATH}}/docker-compose.yml down
