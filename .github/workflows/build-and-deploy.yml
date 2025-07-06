@@ -83,8 +83,9 @@ jobs:
           fi
 
           echo "Pushed $IMAGE_ID:$VERSION"
-          [ "$VERSION" != "latest" ] && \
-          echo "Also tagged as latest: $IMAGE_ID:latest"
+          if [ "$VERSION" != "latest" ]; then
+            echo "Also tagged as latest: $IMAGE_ID:latest"
+          fi
 
   deploy:
     runs-on: ubuntu-latest
