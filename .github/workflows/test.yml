@@ -21,7 +21,7 @@ jobs:
       - name: Install dependencies
         run: |
           curl -sSL https://install.python-poetry.org | python3 -
-          poetry lock --no-update
+          poetry lock
           poetry install --with dev
 
       - name: Run pytest
