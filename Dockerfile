@@ -38,7 +38,8 @@ RUN poetry config virtualenvs.in-project true && \
 COPY log.conf gunicorn.conf.py ./
 COPY logs ./logs
 
-RUN adduser --disabled-password --gecos '' libdb && \
+RUN addgroup --gid 1005 libdb && \
+    adduser --disabled-password --gecos '' --uid 1005 --gid 1005 libdb && \
     chown -R libdb:libdb /app && \
     mkdir -p /etc/libdb/logs && \
     chown -R libdb:libdb /etc/libdb/logs
