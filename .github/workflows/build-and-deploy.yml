@@ -131,12 +131,16 @@ jobs:
             >> ${{ vars.SERVER_PATH}}/env_file
 
             # Create log folder, if needed
-            log_path="${{ vars.SERVER_PATH}}/ \
-            $(echo "${{ vars.LOG_FOLDER_PATH }}" | sed 's#/etc/libdb##')"
-
+            log_path="${{ vars.SERVER_PATH}}/logs"
             echo log_path=$log_path
             mkdir -p $log_path
             chown -R ${{ env.SERVER_USER }}:${{ env.SERVER_USER }} $log_path
+
+            # Create instance folder, if needed
+            instance_path="${{ vars.SERVER_PATH}}/instance"
+            echo instance_path=$instance_path
+            mkdir -p $instance_path
+            chown -R ${{ env.SERVER_USER }}:${{ env.SERVER_USER }} $instance_path
 
             # Rebuild container
             docker compose -f ${{ vars.SERVER_PATH}}/docker-compose.yml pull
