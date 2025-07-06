@@ -3,8 +3,8 @@
 import contextlib
 import logging
 import logging.config
-import logging.handlers
 import os
+import secrets
 
 from dotenv import load_dotenv
 from flask import Flask
@@ -69,6 +69,24 @@ def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_object(default_config)
 
+    # Confirm the instance folder exists
+    with contextlib.suppress(OSError):
+        os.makedirs(app.instance_path)
+
+    # Generate SECRET_KEY if it doesn't already exist and load it
+    app.config.from_pyfile("secret_key_config.cfg", silent=True)
+
+    if app.config["SECRET_KEY"]:
+        app.logger.info("Found SECRET_KEY")
+    else:
+        app.logger.warning("Couldn't find SECRET_KEY. Generating...")
+
+        secret_config_path = os.path.join(app.instance_path, "secret_key_config.cfg")
+        with open(secret_config_path, "w") as f:
+            f.write(f'SECRET_KEY = "{secrets.token_hex()}"')
+
+        app.config.from_pyfile("secret_key_config.cfg", silent=True)
+
     if test_config is None:
         # load the instance config, if it exists, when not testing
         app.logger.info(f"Loading config from {os.getenv("LIBDB_SETTINGS_FILE")}")
@@ -80,10 +98,6 @@ def create_app(test_config=None):
 
     app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{app.config['DB_NAME']}"
     app.logger.info(f"Database: {app.config["SQLALCHEMY_DATABASE_URI"]}")
-
-    # Confirm the instance folder exists
-    with contextlib.suppress(OSError):
-        os.makedirs(app.instance_path)
 
     # Setup database
     db = init_db(app)  # noqa: F841
