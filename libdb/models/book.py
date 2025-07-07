@@ -24,6 +24,7 @@ class Book(db.Model):  # type: ignore[name-defined]
     notes: Mapped[Optional[str]] = mapped_column(default=None)
     added: Mapped[Optional[str]] = mapped_column(default=datetime.now())
     has_read: Mapped[Optional[bool]] = mapped_column(default=False)
+    genres: Mapped[Optional[str]] = mapped_column(default=None)
 
     authors = db.relationship("Author", secondary="book_author", back_populates="books")
 

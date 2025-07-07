@@ -26,6 +26,7 @@ class AddBookForm(FlaskForm):
     edition = StringField("Edition")
     publisher = StringField("Publisher")
     published = DateField("Published", validators=[Optional()])
+    genres = StringField("Genres")
     location = StringField("Location")
     notes = TextAreaField("Notes")
     has_read = BooleanField("Read?")

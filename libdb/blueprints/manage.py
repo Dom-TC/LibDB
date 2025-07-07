@@ -57,6 +57,7 @@ def add_book():
         publisher = clean_whitespace(form.publisher)
         location = clean_whitespace(form.location)
         notes = clean_whitespace(form.notes)
+        genres = clean_whitespace(form.genres)
 
         published = form.published.data
         has_read = form.has_read.data
@@ -73,6 +74,7 @@ def add_book():
             location=location,  # type: ignore[call-arg]
             notes=notes,  # type: ignore[call-arg]
             has_read=has_read,  # type: ignore[call-arg]
+            genres=genres,  # type: ignore[call-arg]
         )
 
         new_book.authors = selected_authors
