@@ -58,7 +58,9 @@ def add_book():
         location = clean_whitespace(form.location)
         notes = clean_whitespace(form.notes)
         genres = clean_whitespace(form.genres)
+        lent_to = clean_whitespace(form.lent_to)
 
+        is_lent_out = bool(lent_to)
         published = form.published.data
         has_read = form.has_read.data
 
@@ -75,6 +77,8 @@ def add_book():
             notes=notes,  # type: ignore[call-arg]
             has_read=has_read,  # type: ignore[call-arg]
             genres=genres,  # type: ignore[call-arg]
+            lent_to=lent_to,  # type: ignore[call-arg]
+            is_lent_out=is_lent_out,  # type: ignore[call-arg]
         )
 
         new_book.authors = selected_authors
