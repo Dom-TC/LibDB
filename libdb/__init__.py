@@ -8,6 +8,7 @@ import secrets
 
 from dotenv import load_dotenv
 from flask import Flask
+from flask_alembic import Alembic
 
 from libdb.blueprints import library_blueprint, manage_blueprint
 from libdb.database import init_db
@@ -101,6 +102,15 @@ def create_app(test_config=None):
 
     # Setup database
     db = init_db(app)  # noqa: F841
+
+    # Register alembic
+    app.logger.info("Registering alembic")
+    alembic = Alembic()
+    alembic.init_app(app)
+
+    with app.app_context():
+        app.logger.info("Attempting to upgrade database")
+        alembic.upgrade()
 
     app.logger.info("Registering blueprints")
     app.register_blueprint(library_blueprint)
