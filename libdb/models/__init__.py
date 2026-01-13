@@ -1,8 +1,23 @@
 """The various database models."""
 
-from . import author, book
-from .book_author import book_author as book_author_table
+from . import author, book, genre, person, publisher, series, shelf
+
+Author = author.Author
+BookAuthor = author.BookAuthor
 
 Book = book.Book
-Author = author.Author
-book_author = book_author_table
+BookReadStatus = book.BookReadStatus
+
+
+Genre = genre.Genre
+BookGenre = genre.BookGenre
+
+Person = person.Person
+BookLoan = person.BookLoan
+
+Publisher = publisher.Publisher
+
+Series = series.Series
+BookSeries = series.BookSeries
+
+Shelf = shelf.Shelf

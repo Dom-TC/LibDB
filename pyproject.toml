@@ -45,6 +45,8 @@ pytest = "pytest --cov=libdb tests/ --cov-report term:skip-covered"
 flake8 = "flake8 libdb"
 bandit = "bandit -c pyproject.toml -r libdb"
 mypy = "mypy libdb"
+db_revision = "flask db revision"
+db_upgrade = "flask db upgrade"
 
 [tool.isort]
 profile = "black"
