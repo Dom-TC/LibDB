@@ -1,9 +1,11 @@
 """Books blueprint and routes."""
 
+from collections import defaultdict
+
 from flask import Blueprint, abort, flash, redirect, render_template, request, url_for
 
 from libdb.forms.books import AddBookForm, LoanBookForm
-from libdb.models import Book, Person
+from libdb.models import Book
 from libdb.services.books import (
     BookSort,
     LoanFilter,
@@ -16,6 +18,7 @@ from libdb.services.books import (
     loan_book,
     return_book,
 )
+from libdb.services.shelves import list_shelves
 
 bp = Blueprint(
     "books",
@@ -42,9 +45,20 @@ def list_books_route():
         shelf_id=int(shelf_id) if shelf_id else None,
     )
 
+    shelves: dict[str, list[Book]] = defaultdict(list)
+
+    all_shelves = list_shelves()
+
+    for shelf in all_shelves:
+        shelves[shelf.name] = []
+
+    for book in books:
+        shelf_name = book.shelf.name if book.shelf else "Unsorted"
+        shelves[shelf_name].append(book)
+
     return render_template(
         "/books/list.jinja",
-        books=books,
+        shelves=shelves,
         sort=sort,
         direction=direction,
         read=read,
@@ -77,7 +91,7 @@ def add_book_route():
             notes=form.notes.data,
         )
         flash(f"Added book {book.title}", "success")
-        return redirect(url_for("books.list_books"))
+        return redirect(url_for("books.list_books_route"))
 
     return render_template("books/add.jinja", form=form)
 
@@ -115,7 +129,7 @@ def edit_book_route(book_id: int):
             genres=form.get_or_create_genres(),
         )
         flash("Book updated successfully.", "success")
-        return redirect(url_for("books.view_book", book_id=book.id))
+        return redirect(url_for("books.view_book_route", book_id=book.id))
 
     # Refresh choices
     form.__init__(obj=book)
@@ -137,7 +151,7 @@ def loan_book_route(book_id: int):
             flash(f"{book.title} loaned to {person.name}.", "success")
         except ValueError as e:
             flash(str(e), "warning")
-        return redirect(url_for("books.view_book", book_id=book.id))
+        return redirect(url_for("books.view_book_route", book_id=book.id))
 
     return render_template("books/loan.jinja", form=form, book=book)
 
@@ -151,4 +165,4 @@ def return_book_route(book_id: int):
         flash(f"{book.title} has been returned by {loan.person.name}.", "success")
     else:
         flash(f"{book.title} is not currently loaned out.", "warning")
-    return redirect(url_for("books.view_book", book_id=book.id))
+    return redirect(url_for("books.view_book_route", book_id=book.id))

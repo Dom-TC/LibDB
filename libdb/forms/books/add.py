@@ -53,7 +53,7 @@ class AddBookForm(FlaskForm):
         query_factory=lambda: Author.query.order_by(
             Author.surname, Author.first_names
         ).all(),
-        get_label=lambda a: f"{a.surname}, {a.first_name}",
+        get_label=lambda a: f"{a.surname}, {a.first_names}",
         allow_blank=False,
         validators=[DataRequired()],
     )

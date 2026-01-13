@@ -1,0 +1,45 @@
+{% extends "base.jinja" %}
+{% block title %}
+    Books
+{% endblock title %}
+{% block content %}
+    <h1>Books</h1>
+    <div class="controls">
+        <a href="{{ url_for('books.add_book_route') }}">Add Book</a>
+    </div>
+    <div class="books">
+        {% for shelf_name, books in shelves.items() %}
+            <section class="shelf">
+                <h2>{{ shelf_name }}</h2>
+                <ul>
+                    {% for book in books %}
+                        <li class="heading">
+                            <span class="title">Title</span>
+                            <span class="author">Author(s)</span>
+                        </li>
+                        <li>
+                            <span class="title">
+                                {{ book.title }}
+                                {% if book.subtitle %}: {{ book.subtitle }}{% endif %}
+                            </span>
+                            <span class="author">
+                                {% for book_author in book.authors %}
+                                    {{ book_author.author.display_name }}
+                                    {%- if not loop.last -%};{% endif %}
+                                {% endfor %}
+                            </span>
+                            <span class="buttons">
+                                <a href="{{ url_for('books.edit_book_route', book_id=book.id) }}">Edit</a>
+                                {% if book.is_loaned %}
+                                    <a href="{{ url_for('books.return_book_route', book_id=book.id) }}">Return</a>
+                                {% else %}
+                                    <a href="{{ url_for('books.loan_book_route', book_id=book.id) }}">Loan</a>
+                                {% endif %}
+                            </span>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </section>
+        {% endfor %}
+    </div>
+{% endblock content %}

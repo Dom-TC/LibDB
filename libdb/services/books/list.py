@@ -1,6 +1,5 @@
 """Service for listing books."""
 
-import logging
 from typing import Sequence
 
 from sqlalchemy import asc, case, desc, select
@@ -19,8 +18,6 @@ from libdb.models import (
 
 from .enums import BookSort, LoanFilter, ReadFilter, SortDirection
 
-log = logging.getLogger(__name__)
-
 
 def list_books(
     *,
@@ -31,10 +28,6 @@ def list_books(
     shelf_id: int | None = None,
 ) -> Sequence[Book]:
     """Return a list of books filtered and sorted according to the given criteria."""
-    log.info(
-        f"Listing books with sort:{sort}, direction:{direction}, read_filter:{read_filter}, loan_filter:{loan_filter}, shelf_id:{shelf_id}"
-    )
-
     stmt = (
         select(Book)
         .options(
@@ -55,9 +48,7 @@ def list_books(
     else:
         stmt = _apply_sort(stmt, sort, direction)
 
-    log.debug(f"stmt: {stmt}")
-
-    return db.session.scalars(stmt).all()
+    return db.session.scalars(stmt).unique().all()
 
 
 def _apply_read_filter(stmt, read_filter: ReadFilter):

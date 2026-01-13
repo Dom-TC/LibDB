@@ -2,14 +2,15 @@
 <title>
     {% block title %}
     {% endblock title %}
-- LibDB</title>
-<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+    - LibDB
+</title>
 <nav>
     <h1>LibDB</h1>
     <span>
-        <a href="{{ url_for('library.index') }}">Search</a>
-        <a href="{{ url_for('manage.add_book') }}">Add Book</a>
-        <a href="{{ url_for('manage.add_author') }}">Add Author</a>
+        <a href="{{ url_for('books.list_books_route') }}">Books</a>
+        <a href="{{ url_for('books.list_books_route') }}">Authors</a>
+        <a href="{{ url_for('books.list_books_route') }}">Shelves</a>
+        <a href="{{ url_for('books.list_books_route') }}">People</a>
     </span>
 </nav>
 <section class="content">

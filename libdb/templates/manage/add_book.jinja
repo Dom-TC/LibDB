@@ -1,8 +1,0 @@
-{% extends "base.jinja" %}
-{% block title %}
-    Add Book
-{% endblock title %}
-{% block content %}
-    {% from "_formhelpers.jinja" import render_form %}
-    {{ render_form(form, action=url_for('manage.add_book') ) }}
-{% endblock content %}
