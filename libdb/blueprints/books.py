@@ -1,16 +1,17 @@
 """Books blueprint and routes."""
 
-from flask import Blueprint, flash, redirect, render_template, request, url_for
+from flask import Blueprint, abort, flash, redirect, render_template, request, url_for
 
 from libdb.forms import AddBookForm
+from libdb.models import Book
 from libdb.services.books import (
     BookSort,
     LoanFilter,
     ReadFilter,
     SortDirection,
-)
-from libdb.services.books import add_book as service_add_book
-from libdb.services.books import (
+    add_book,
+    edit_book,
+    get_book_by_id,
     list_books,
 )
 
@@ -59,7 +60,7 @@ def add_book_route():
     form = AddBookForm()
 
     if form.validate_on_submit():
-        book = service_add_book(
+        book = add_book(
             title=form.title.data or "",
             authors=form.authors.data,
             shelf=form.shelf.data,
@@ -80,15 +81,44 @@ def add_book_route():
 
 
 @bp.route("/<int:book_id>", methods=["GET"])
-def view_book(book_id: int):
+def view_book_route(book_id: int):
     """View the details of a specified book."""
-    pass
+    book = get_book_by_id(book_id)
+    if not book:
+        abort(404, description=f"Book with ID {book_id} not found")
+
+    return render_template("books/view.jinja", book=book)
 
 
 @bp.route("/<int:book_id>/edit", methods=["GET", "POST"])
-def edit_book(book_id: int):
+def edit_book_route(book_id: int):
     """Edit the details for a specified book."""
-    pass
+    book = Book.query.get_or_404(book_id)
+    form = AddBookForm(obj=book)
+
+    if form.validate_on_submit():
+        edit_book(
+            book=book,
+            title=form.title.data or "",
+            subtitle=form.subtitle.data,
+            volume=form.volume.data,
+            edition=form.edition.data,
+            publisher=form.get_or_create_publisher(),
+            shelf=form.shelf.data,
+            published_date=form.published_date.data,
+            notes=form.notes.data,
+            authors=form.authors.data,
+            series=form.get_or_create_series(),
+            series_position=form.series_position.data,
+            genres=form.get_or_create_genres(),
+        )
+        flash("Book updated successfully.", "success")
+        return redirect(url_for("books.view_book", book_id=book.id))
+
+    # Refresh choices
+    form.__init__(obj=book)
+
+    return render_template("books/edit.jinja", form=form, book=book)
 
 
 @bp.route("/<int:book_id>/loan", methods=["GET", "POST"])
