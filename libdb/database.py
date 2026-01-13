@@ -14,7 +14,7 @@ convention = {
 }
 
 
-class Base(DeclarativeBase, MappedAsDataclass):
+class Base(DeclarativeBase):
     """The base SQLAlchemy model."""
 
     metadata = MetaData(naming_convention=convention)

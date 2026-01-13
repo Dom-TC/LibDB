@@ -16,6 +16,9 @@ class Author(db.Model):  # type: ignore[name-defined]
     """The author database model."""
 
     __tablename__ = "authors"
+    __table_args__ = (
+        UniqueConstraint("first_names", "surname", name="uq_author_full_name"),
+    )
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True, default=None)
 

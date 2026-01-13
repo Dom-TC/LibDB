@@ -2,8 +2,8 @@
 
 from flask import Blueprint, abort, flash, redirect, render_template, request, url_for
 
-from libdb.forms import AddBookForm
-from libdb.models import Book
+from libdb.forms.books import AddBookForm, LoanBookForm
+from libdb.models import Book, Person
 from libdb.services.books import (
     BookSort,
     LoanFilter,
@@ -13,6 +13,8 @@ from libdb.services.books import (
     edit_book,
     get_book_by_id,
     list_books,
+    loan_book,
+    return_book,
 )
 
 bp = Blueprint(
@@ -122,36 +124,31 @@ def edit_book_route(book_id: int):
 
 
 @bp.route("/<int:book_id>/loan", methods=["GET", "POST"])
-def loan_book(book_id: int):
+def loan_book_route(book_id: int):
     """Loan the specified book to a person."""
-    pass
+    book = Book.query.get_or_404(book_id)
+    form = LoanBookForm()
+
+    if form.validate_on_submit():
+        person = form.person.data
+
+        try:
+            loan_book(book, person)
+            flash(f"{book.title} loaned to {person.name}.", "success")
+        except ValueError as e:
+            flash(str(e), "warning")
+        return redirect(url_for("books.view_book", book_id=book.id))
+
+    return render_template("books/loan.jinja", form=form, book=book)
 
 
 @bp.route("/<int:book_id>/return", methods=["POST"])
-def return_book(book_id: int):
+def return_book_route(book_id: int):
     """Return a loaned out book."""
-    pass
-
-
-@bp.route("/series", methods=["GET"])
-def list_series():
-    """List all series."""
-    pass
-
-
-@bp.route("/series/<int:series_id>/edit", methods=["GET", "POST"])
-def edit_series(series_id: int):
-    """Edit the specified series."""
-    pass
-
-
-@bp.route("/<int:book_id>/series/add", methods=["POST"])
-def add_book_to_series(book_id: int):
-    """Add the specified book to a series."""
-    pass
-
-
-@bp.route("/<int:book_id>/series/remove", methods=["POST"])
-def remove_book_from_series(book_id: int):
-    """Remove a book from a series."""
-    pass
+    book = Book.query.get_or_404(book_id)
+    loan = return_book(book)
+    if loan:
+        flash(f"{book.title} has been returned by {loan.person.name}.", "success")
+    else:
+        flash(f"{book.title} is not currently loaned out.", "warning")
+    return redirect(url_for("books.view_book", book_id=book.id))

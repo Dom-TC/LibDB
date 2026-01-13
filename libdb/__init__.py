@@ -9,7 +9,7 @@ from dotenv import load_dotenv
 from flask import Flask
 from flask_alembic import Alembic
 
-from libdb.blueprints import library_blueprint, manage_blueprint
+from libdb.blueprints import books_bp
 from libdb.config import configure_app
 from libdb.database import init_db
 from libdb.log import configure_logging
@@ -45,8 +45,7 @@ def create_app(test_config: Mapping[str, Any] | None = None):
         alembic.upgrade()
 
     app.logger.info("Registering blueprints")
-    app.register_blueprint(library_blueprint)
-    app.register_blueprint(manage_blueprint)
+    app.register_blueprint(books_bp)
 
     app.add_url_rule("/", endpoint="index")
 

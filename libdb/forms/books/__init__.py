@@ -1,5 +1,6 @@
 """Forms relating to books."""
 
-import add
+from . import add, loan
 
 AddBookForm = add.AddBookForm
+LoanBookForm = loan.LoanBookForm
