@@ -3,7 +3,7 @@
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import MetaData, inspect
 from sqlalchemy.exc import NoInspectionAvailable
-from sqlalchemy.orm import DeclarativeBase
+from sqlalchemy.orm import DeclarativeBase, MappedAsDataclass
 
 convention = {
     "ix": "ix_%(column_0_label)s",
@@ -14,7 +14,7 @@ convention = {
 }
 
 
-class Base(DeclarativeBase):
+class Base(DeclarativeBase, MappedAsDataclass):
     """The base SQLAlchemy model."""
 
     metadata = MetaData(naming_convention=convention)

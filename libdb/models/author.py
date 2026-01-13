@@ -19,13 +19,21 @@ class Author(db.Model):  # type: ignore[name-defined]
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True, default=None)
 
-    name: Mapped[str] = mapped_column(String, unique=True, nullable=False)
+    first_names: Mapped[str] = mapped_column(String, nullable=False)
+    surname: Mapped[str] = mapped_column(String, nullable=False, index=True)
+
     creation_date: Mapped[datetime] = mapped_column(
         DateTime, default=lambda: datetime.now(timezone.utc)
     )
 
     # Relationships
     books: Mapped[List["BookAuthor"]] = relationship(back_populates="author")
+
+    # Properties
+    @property
+    def display_name(self) -> str:
+        """Return formatted name: 'Surname, First Name'."""
+        return f"{self.surname}, {self.first_names}"
 
 
 class BookAuthor(db.Model):  # type: ignore[name-defined]
