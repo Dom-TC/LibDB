@@ -24,9 +24,4 @@ def init_db(app):
     from libdb.models.book import Book
     from libdb.models.book_author import book_author
 
-    # Create all models and tables
-    with app.app_context():
-        app.logger.info("Creating tables")
-        db.create_all()
-
     return db
